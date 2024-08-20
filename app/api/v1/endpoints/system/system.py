@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
+from app.config import appSettings
+
 system_router = APIRouter(prefix="/system", tags=["系统接口"])
 
 system_router.get("/system/params")
@@ -18,3 +20,8 @@ async def get_system_params(params_name: str):
 async def add_system_params(system_params: str):
     DIC[system_params] = system_params + "9"
     return DIC
+
+
+@system_router.post("/system/settings", summary="查询系统配置")
+async def add_system_params():
+    return appSettings
