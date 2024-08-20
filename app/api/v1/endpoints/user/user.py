@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app.models.user.user import User
+from app.models.user.user import User, UserParam
 
 user_router = APIRouter(prefix="/user", tags=["用户接口"])
 
@@ -24,5 +24,11 @@ async def add_user_params(user_params: str):
 
 @user_router.post("/user/post", summary="用户post请求")
 async def add_user_params(user_data: User):
+    print(f'接收到：{user_data}')
+    return user_data
+
+
+@user_router.post("/user/valid", summary="参数校验样例")
+async def params_valid_sample(user_data: UserParam):
     print(f'接收到：{user_data}')
     return user_data
