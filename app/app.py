@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.middleware.log_middleware import log_middleware
+from . import middleware
 from .api.v1.routes import v1_router
 from .core.config import settings
 from .core.events import startup, shutdown
@@ -33,6 +34,7 @@ def create_app():
 
     # 注册自定义中间件
     app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
+    middleware.registerMiddlewareHandle(app)
 
     # 注册v1_router路由
     app.include_router(v1_router)
