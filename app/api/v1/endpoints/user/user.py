@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
+from app.models.user.user import User
+
 user_router = APIRouter(prefix="/user", tags=["用户接口"])
 
 user_router.get("/user/params")
@@ -18,3 +20,9 @@ async def get_user_params(params_name: str):
 async def add_user_params(user_params: str):
     DIC[user_params] = user_params + "9"
     return DIC
+
+
+@user_router.post("/user/post", summary="用户post请求")
+async def add_user_params(user_data: User):
+    print(f'接收到：{user_data}')
+    return user_data
