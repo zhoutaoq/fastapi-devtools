@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
+from app.models.response import response
 from app.models.user.user import User, UserParam
 
 user_router = APIRouter(prefix="/user", tags=["用户接口"])
@@ -32,3 +33,11 @@ async def add_user_params(user_data: User):
 async def params_valid_sample(user_data: UserParam):
     print(f'接收到：{user_data}')
     return user_data
+
+
+@user_router.post("/user/result", summary="返回参数样例")
+async def params_valid_sample(param: str):
+    forbidden = ['A', 'B', 'C', 'D']
+    if param in forbidden:
+        return response.ResponseFail(f"参数 {forbidden} 不被允许~")
+    return response.ResponseSuccess(param)
