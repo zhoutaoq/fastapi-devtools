@@ -8,6 +8,7 @@ from .api.v1.routes import v1_router
 from .core.config import settings
 from .core.events import startup, shutdown
 from .depends import verify_token
+from .errors import register_custom_error_handle
 
 
 def create_app():
@@ -36,11 +37,14 @@ def create_app():
         allow_headers=["*"],  # 允许所有头部
     )
 
-    # 注册自定义中间件
+    # register custom midware
     app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
     middleware.registerMiddlewareHandle(app)
 
-    # 注册v1_router路由
+    # register custom error handler
+    register_custom_error_handle(app)
+
+    # register v1_router
     app.include_router(v1_router)
 
     return app

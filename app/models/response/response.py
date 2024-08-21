@@ -19,4 +19,4 @@ def ResponseSuccess(resp: Any) -> HttpResponse:
 def ResponseFail(msg: str, code: int = -1) -> HttpResponse:
     currentTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return HttpResponse(
-        code=code, msg=f"[{currentTime}] failed, because of :{msg}")
+        code=code, msg=f"[{currentTime}] failed, because of {msg}")
