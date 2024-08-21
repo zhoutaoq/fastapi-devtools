@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
+from app import depends
 from app.config import appSettings
+from app.models.response import response
 
 system_router = APIRouter(prefix="/system", tags=["系统接口"])
 
@@ -25,3 +27,10 @@ async def add_system_params(system_params: str):
 @system_router.post("/system/settings", summary="查询系统配置")
 async def add_system_params():
     return appSettings
+
+
+@system_router.get("/system/autowired/method", summary="方法级别依赖注入")
+async def depends_autowired_method(
+        token: str = Depends(depends.verify_token),
+):
+    return response.ResponseSuccess(token)
