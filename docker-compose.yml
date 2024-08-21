@@ -12,6 +12,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+# Redis服务配置
+redis:
+  image: redis:latest
+  ports:
+    - "6379:6379"
+
 volumes:
   postgres_data:
     driver: local
@@ -19,3 +25,7 @@ volumes:
       type: none
       o: bind
       device: D:\data\database
+
+
+
+

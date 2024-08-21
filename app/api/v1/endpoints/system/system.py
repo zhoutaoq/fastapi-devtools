@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 
 from app import depends
 from app.config import appSettings
+from app.db.redis_db import get_redis_pool
 from app.models.response import response
 
 system_router = APIRouter(prefix="/system", tags=["系统接口"])
@@ -34,3 +35,21 @@ async def depends_autowired_method(
         token: str = Depends(depends.verify_token),
 ):
     return response.ResponseSuccess(token)
+
+
+@system_router.get("/system/cache/set", summary="缓存设置")
+async def system_cache_set(
+        key: str, value: str
+):
+    redis = await get_redis_pool()
+    await redis.setex(key, 6000, value)
+    return response.ResponseSuccess(f"{key} = {value}")
+
+
+@system_router.get("/system/cache/get", summary="缓存获取")
+async def system_cache_get(
+        key: str
+):
+    redis = await get_redis_pool()
+    value = await redis.get(key)
+    return response.ResponseSuccess(value)
