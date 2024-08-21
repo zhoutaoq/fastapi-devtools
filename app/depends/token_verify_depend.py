@@ -1,7 +1,7 @@
 from fastapi import HTTPException, Header
 
 
-async def verify_token(x_token: str = Header()):
+async def verify_token(x_token: str = Header(default=None)):
     """ token验证 """
     print("x_token:", x_token)
     if x_token is None:

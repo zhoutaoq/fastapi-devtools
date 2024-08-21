@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -7,6 +7,7 @@ from . import middleware
 from .api.v1.routes import v1_router
 from .core.config import settings
 from .core.events import startup, shutdown
+from .depends import verify_token
 
 
 def create_app():
@@ -14,7 +15,10 @@ def create_app():
         title=settings.PROJECT_NAME,
         version=settings.PROJECT_VERSION,
         docs_url="/",
-        description=settings.PROJECT_DESC)
+        description=settings.PROJECT_DESC,
+        # add this param autowired to the whole app
+        dependencies=[Depends(verify_token)]
+    )
 
     # 注册事件
     app.add_event_handler("startup", startup(app))
