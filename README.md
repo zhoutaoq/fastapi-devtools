@@ -2,6 +2,10 @@
 ### Description
 - fastapi + poetry web project
 
+### Environmental preparation
+
+- python >= 3.8
+
 ### Quick start
 
 - pip install  
@@ -9,19 +13,21 @@
 pip install fastapi
 pip install poetry
 ```
+```markdown
+You need to add the storage path of poetry to your system's environment variables
+```
 
-- init project
+
+- lib install
 ```shell
-poetry new fastapi-devtools
 cd fastapi-devtools
-poetry init
 poetry add fastapi
 poetry install
 ```
 
 - start service
 ```shell
-poetry run uvicorn main:app --port 7000 --reload
+poetry run uvicorn main:app --port 8000 --reload
 ```
 
 
