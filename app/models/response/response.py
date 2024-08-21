@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional,Any
+from typing import Optional, Any
 
 from pydantic import BaseModel, Field
 
@@ -13,10 +13,10 @@ class HttpResponse(BaseModel):
 
 def ResponseSuccess(resp: Any) -> HttpResponse:
     currentTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return HttpResponse(code=200, msg=f"{currentTime} 成功", data=resp)
+    return HttpResponse(code=200, msg=f"[{currentTime}] successful", data=resp)
 
 
 def ResponseFail(msg: str, code: int = -1) -> HttpResponse:
     currentTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return HttpResponse(
-        code=code, msg=f"{currentTime} 失败", data=msg)
+        code=code, msg=f"[{currentTime}] failed, because of :{msg}")
