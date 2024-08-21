@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import secrets
 import base64
-
+import secrets
 
 def generate_secret_key(prefix: str, nbytes: int = 32) -> str:
     # 生成 nbytes 随机字节

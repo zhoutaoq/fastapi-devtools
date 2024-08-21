@@ -4,7 +4,7 @@ import bcrypt
 
 
 def get_password_hash(password: str):
-    if not password:  # 检查密码是否为None或空字符串
+    if not password:
         return None
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     return hashed.decode('utf-8')

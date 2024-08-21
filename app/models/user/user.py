@@ -11,6 +11,7 @@ class User(Base, table=True):
     __tablename__ = "users"
 
     username: Optional[str] = Field(index=True, unique=True, min_length=6, max_length=50, description="用户名")
+    hashed_password: Optional[str] = Field(description="哈希密码")
     email: Optional[str] = Field(index=True, unique=True, description="邮箱")
     phone_number: Optional[str] = Field(index=True, min_length=1, max_length=20, description="手机号码")
 

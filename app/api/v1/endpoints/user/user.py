@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
+from app.crud.user.user import UserCRUD
+from app.db.postgresql_db import engine, session_maker
 from app.models.response import response
 from app.models.user.user import User, UserParam
 
@@ -46,3 +48,32 @@ async def params_valid_sample(param: str):
 @user_router.get("/user/token", summary="token样例")
 async def token_sample(param: str):
     return response.ResponseSuccess(param)
+
+
+# 创建异步session
+async_session = session_maker(engine)
+mapper = UserCRUD(User)
+
+
+@user_router.post("/user/create", summary="create user")
+async def create_user(user: User):
+    user = await mapper.create_user(async_session, user)
+    return user
+
+
+@user_router.post("/user/query", summary="query user")
+async def query_user(user: User):
+    user = await mapper.get_by_username(async_session, user.username)
+    return user
+
+
+@user_router.post("/user/update", summary="update user")
+async def update_user(user: User):
+    user = await mapper.update(async_session, user.id, user.dict())
+    return user
+
+
+@user_router.post("/user/delete", summary="delete user")
+async def delete_user(user: User):
+    result = await mapper.delete(async_session, user.id)
+    return response.ResponseSuccess(result)

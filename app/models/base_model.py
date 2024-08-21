@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-"""
-@Author  ：Chen GangQiang
-@Date    ：2024/2/25 01:47 
-@Desc    ：
-"""
-
 from datetime import datetime, timezone
 from typing import Optional
 from sqlmodel import SQLModel, Field

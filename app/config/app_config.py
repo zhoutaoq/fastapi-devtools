@@ -23,3 +23,5 @@ class AppConfigSettings(BaseSettings):
     db_database: str
     """redis配置"""
     redis_dsn: RedisDsn = None
+
+    POSTGRES_URL: str = None
