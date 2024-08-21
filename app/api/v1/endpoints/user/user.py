@@ -41,3 +41,8 @@ async def params_valid_sample(param: str):
     if param in forbidden:
         return response.ResponseFail(f"参数 {forbidden} 不被允许~")
     return response.ResponseSuccess(param)
+
+
+@user_router.get("/user/token", summary="token样例")
+async def token_sample(param: str):
+    return response.ResponseSuccess(param)
