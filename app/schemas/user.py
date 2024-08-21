@@ -1,6 +1,10 @@
-from typing import Optional
+from datetime import date
+from typing import Optional, List
 
 from pydantic import BaseModel, EmailStr, Field
+
+from app.models.user import User
+from app.models.user.user_profile import UserProfile
 
 
 class UserCreateByEmailSchema(BaseModel):
@@ -45,6 +49,33 @@ class TokenResponseSchema(BaseModel):
 
 
 class UpdateUserSchema(BaseModel):
+    id: Optional[str] = Field(None, min_length=1, max_length=50)
     username: Optional[str] = Field(None, min_length=6, max_length=50)
     email: Optional[EmailStr] = None
     phone_number: Optional[str] = Field(None, min_length=1, max_length=20)
+
+
+class UserProfileSchema(BaseModel):
+    user_id: Optional[str] = Field(None, min_length=1, max_length=50)
+    # UserProfile相关字段
+    nickname: Optional[str] = Field(None, max_length=50)
+    avatar_url: Optional[str] = None
+    birth_date: Optional[date] = Field(default=None, description="出生日期")
+    bio: Optional[str] = Field(None, max_length=255)
+
+
+# user all info
+class UserInfoSchema(BaseModel):
+    id: Optional[str] = Field(None, min_length=1, max_length=50)
+    username: Optional[str] = Field(None, min_length=6, max_length=50)
+    email: Optional[EmailStr] = None
+    phone_number: Optional[str] = Field(None, min_length=1, max_length=20)
+    # UserProfile
+    user_profile: List[UserProfile] = Field(None, min_length=0, max_length=20)
+
+    def set_properties(self, user: User, profile_list: list[UserProfile]):
+        self.id = user.id
+        self.username = user.username
+        self.email = user.username
+        self.phone_number = user.phone_number
+        self.user_profile = profile_list

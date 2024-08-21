@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
 
 from app.crud.user.user import UserCRUD
 from app.db.postgresql_db import engine, session_maker
 from app.models.response import response
 from app.models.user.user import User, UserParam
+from app.schemas.user import UserProfileSchema
 
 user_router = APIRouter(prefix="/user", tags=["用户接口"])
 
@@ -77,3 +78,24 @@ async def update_user(user: User):
 async def delete_user(user: User):
     result = await mapper.delete(async_session, user.id)
     return response.ResponseSuccess(result)
+
+
+@user_router.post("/user/info/query", summary="query user with profile")
+async def query_user_with_profile(id: str):
+    user_info_data = await mapper.get_user_with_profile(async_session, id)
+    return response.ResponseSuccess(user_info_data)
+
+
+@user_router.post("/user/profile/query", summary="query user and profile")
+async def query_user_profile(id: str):
+    user_data = await mapper.get_by_user_id(async_session, id)
+    user_profile_data = await mapper.get_user_profile(async_session, id)
+    return response.ResponseSuccess({"user": user_data, "profile": user_profile_data})
+
+
+@user_router.post("/user/profile/update", summary="update user profile")
+async def update_user_profile(user_model: UserProfileSchema = Body(...), ):
+    profile_update_data = user_model.dict(
+        include={"nickname", "avatar_url", "birth_date", "bio"}, exclude_unset=True)
+    await mapper.update_user_profile(async_session, user_model.user_id, profile_update_data)
+    return response.ResponseSuccess(profile_update_data)

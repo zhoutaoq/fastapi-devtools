@@ -5,6 +5,8 @@ from sqlmodel import select
 
 from app.crud.base_crud import BaseCRUD
 from app.models.user import User
+from app.models.user.user_profile import UserProfile
+from app.schemas.user import UserInfoSchema
 
 
 class UserCRUD(BaseCRUD[User]):
@@ -59,3 +61,40 @@ class UserCRUD(BaseCRUD[User]):
                 setattr(user, key, value)
             await session.commit()
             return user
+
+    # todo NOTICE: Example of a one-to-many query associated with primary and slave
+    async def get_user_with_profile(self, async_session: async_sessionmaker[AsyncSession], user_id: str) -> Optional[
+        UserInfoSchema]:
+        async with async_session() as session:
+            statement = select(self.model).where(self.model.id == user_id)
+            result = await session.execute(statement)
+            user = result.scalars().first()
+            profile_statement = select(UserProfile).where(UserProfile.user_id == user_id)
+            profile_result = await session.execute(profile_statement)
+            profile_list = profile_result.scalars().all()
+            user_info_schema = UserInfoSchema()
+            user_info_schema.set_properties(user, profile_list)
+            return user_info_schema
+
+    async def get_user_profile(self, async_session: async_sessionmaker[AsyncSession], user_id: str) -> Optional[
+        UserProfile]:
+        """ 获取用户资料 """
+        async with async_session() as session:
+            statement = select(UserProfile).where(UserProfile.user_id == user_id)
+            result = await session.execute(statement)
+            return result.scalars().first()
+
+    async def update_user_profile(self, async_session: async_sessionmaker[AsyncSession], user_id: str,
+                                  profile_update: dict):
+        """ 更新用户资料表的信息 """
+        async with async_session() as session:
+            statement = select(UserProfile).filter(UserProfile.user_id == user_id)
+            result = await session.execute(statement)
+            profile = result.scalars().first()
+            if not profile:
+                profile = UserProfile(user_id=user_id)
+                session.add(profile)
+            for key, value in profile_update.items():
+                setattr(profile, key, value)
+            await session.commit()
+            return profile
