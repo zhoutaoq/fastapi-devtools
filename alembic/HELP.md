@@ -98,3 +98,9 @@ from app.models.user import User, UserProfile
 应用迁移：alembic upgrade head
 回滚迁移（如需）：alembic downgrade -1
 查看当前迁移状态：alembic current
+
+### 测试效果
+- 重命名表：删表重建
+
+
+
