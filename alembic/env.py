@@ -3,8 +3,14 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import pool
 from sqlmodel import SQLModel
+import sqlmodel
 
-# 导入模型
+# scan model class begin
+
+from app.models.user import User, UserProfile
+
+# scan model class end
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

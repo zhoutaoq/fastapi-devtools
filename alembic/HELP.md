@@ -2,14 +2,18 @@ Alembic 是一个数据库迁移工具，主要用于 SQLAlchemy。它允许你�
 1. 安装 Alembic
 
 首先，你需要安装 Alembic。如果你还没有安装，可以通过 pip 安装：
-bash
+
+```shell
 pip install alembic
+```
 
 2. 初始化 Alembic
 
 在你的项目根目录中，初始化 Alembic 以创建所需的配置文件和目录结构：
-bash
+```shell
 alembic init alembic
+```
+
 
 这会创建一个 alembic 目录，其中包含一个 env.py 文件和 versions 目录，以及一个 alembic.ini 配置文件。
 3. 配置 Alembic
@@ -36,8 +40,9 @@ target_metadata = Base.metadata
 5. 创建迁移脚本
 
 使用 Alembic 生成新的迁移脚本。这个命令会比较当前的数据库模式与模型定义，生成一个新的迁移脚本：
-bash
+```shell
 alembic revision --autogenerate -m "initial migration"
+```
 
 -m "initial migration" 是你对迁移脚本的描述，能够帮助你记住这次迁移的目的。
 6. 编辑迁移脚本（如果需要）
@@ -46,28 +51,42 @@ alembic revision --autogenerate -m "initial migration"
 7. 应用迁移
 
 运行迁移脚本以将更改应用到数据库：
-bash
+```shell
 alembic upgrade head
-
+```
 这会将数据库迁移到最新版本。如果你只想应用到特定版本，可以使用该版本的修订号：
-bash
+```shell
 alembic upgrade <revision>
+```
 
 8. 回滚迁移
 
 如果需要回滚最近的迁移，可以使用：
-bash
+```shell
 alembic downgrade -1
+```
 
 这将回滚最近的一次迁移。如果你需要回滚到特定版本，可以使用该版本的修订号：
-bash
+```shell
 alembic downgrade <revision>
+```
 
 9. 查看当前迁移状态
 
 你可以检查数据库当前的迁移状态，了解已经应用了哪些迁移：
-bash
+```shell
 alembic current
+```
+
+10. 注意点
+
+- [env.py](env.py) 中，需要将所有要同步的模型 class 导入,
+```python
+# line 9
+from app.models.user import User, UserProfile
+```
+
+- 如果生成出的数据库同步脚本没有 'import sqlmodel'，需要手动导入，否则无法执行 'alembic upgrade head' 成功
 
 总结
 

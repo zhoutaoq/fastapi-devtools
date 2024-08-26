@@ -1,9 +1,11 @@
 from typing import Optional
 
 from pydantic import BaseModel, constr, conint, validator
-from sqlmodel import Field
+from sqlalchemy import Integer
+from sqlmodel import Field, Column
 
 from app.models.base_model import Base
+from app.models.user.user_enum import UserStatus
 
 
 class User(Base, table=True):
@@ -14,6 +16,7 @@ class User(Base, table=True):
     hashed_password: Optional[str] = Field(description="哈希密码")
     email: Optional[str] = Field(index=True, unique=True, description="邮箱")
     phone_number: Optional[str] = Field(index=True, min_length=1, max_length=20, description="手机号码")
+    status: UserStatus = Field(default=UserStatus.ACTIVE, sa_column=Column(Integer), description="状态")
 
 
 class UserParam(BaseModel):
