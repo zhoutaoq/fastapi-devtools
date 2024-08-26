@@ -1,0 +1,18 @@
+version: '3.8'  # 使用适当的版本
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"       # 将主机的 80 端口映射到容器的 80 端口
+      - "443:443"     # 将主机的 443 端口映射到容器的 443 端口（如果需要 HTTPS）
+    volumes:
+      - /d/data/nginx/conf:/etc/nginx/conf.d  # 将主机的 /d/data/nginx/conf 目录挂载到容器的 /etc/nginx/conf.d
+      - /d/data/nginx/html:/usr/share/nginx/html # 将主机的 /d/data/nginx/html 目录挂载到容器的 /usr/share/nginx/html
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge
