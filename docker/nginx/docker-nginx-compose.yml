@@ -7,9 +7,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /d/data/nginx/nginx.conf:/etc/nginx/nginx.conf  # 挂载主配置文件
-      - /d/data/nginx/conf:/etc/nginx/conf.d  # 挂载额外的配置文件目录
-      - /d/data/nginx/html:/usr/share/nginx/html  # 挂载网页文件目录
+      - /d/Python/fastapi-devtools/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /d/Python/fastapi-devtools/docker/nginx/conf:/etc/nginx/conf.d
+      - /d/Python/fastapi-devtools/docker/nginx/html:/usr/share/nginx/html
     networks:
       - nginx_network
 
