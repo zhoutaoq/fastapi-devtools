@@ -1,9 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome to Nginx!</title>
+    <meta charset="UTF-8">
+    <title>HTTP Request Sender</title>
+    <script>
+        async function sendHttpRequest() {
+            const urlInput = document.getElementById('urlInput');
+            const methodSelect = document.getElementById('methodSelect');
+            const resultDiv = document.getElementById('result');
+
+            try {
+                // 获取输入值
+                const url = urlInput.value;
+                const method = methodSelect.value;
+
+                // 确保输入有效
+                if (!url) {
+                    throw new Error('URL is required.');
+                }
+
+                // 发起 HTTP 请求
+                const response = await fetch(url, {
+                    method: method.toUpperCase(), // 确保方法是大写的
+                    headers: {
+                        'Content-Type': 'application/json' // 设置默认的 Content-Type
+                    }
+                });
+
+                // 检查响应状态
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // 获取响应数据
+                const data = await response.json(); // 假设响应是 JSON 格式
+
+                // 显示结果
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                // 显示错误信息
+                resultDiv.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>Hello, Nginx!</h1>
+    <h2>HTTP Request Sender</h2>
+    <label for="urlInput">URL:</label>
+    <input type="text" id="urlInput" placeholder="Enter URL here">
+
+    <label for="methodSelect">Method:</label>
+    <select id="methodSelect">
+        <option value="get">GET</option>
+        <option value="post">POST</option>
+    </select>
+
+    <button onclick="sendHttpRequest()">Send Request</button>
+
+    <h3>Response:</h3>
+    <pre id="result"></pre>
 </body>
 </html>
